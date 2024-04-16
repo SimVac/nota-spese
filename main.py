@@ -34,8 +34,9 @@ def verify_login():
     data = [request.form["username"], hash_password]
     con = sq.connect("data.db")
     cur = con.cursor()
-    res = cur.execute("SELECT * FROM Utente WHERE username=? AND password=?", data)
-    if len(res.fetchall()) > 0:
+    res = cur.execute("SELECT * FROM Utente WHERE username=? AND password=?", data).fetchall()
+    con.close()
+    if len(res) > 0:
         session["logged"] = True
         session.modified = True
         return redirect("/")

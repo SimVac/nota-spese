@@ -38,7 +38,16 @@ def login():
 
 @app.route("/add-nota")
 def add_nota_route():
+    if "logged" not in session or not session["logged"]:
+        return redirect("/login")
     return render_template("aggiunta.html")
+
+
+@app.route("/user")
+def user_route():
+    if "logged" not in session or not session["logged"]:
+        return redirect("/login")
+    return render_template("utente.html")
 
 
 @app.post("/api/add-nota")

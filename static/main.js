@@ -9,9 +9,6 @@ fetch("/api/user-notes")
             td.innerText = idx + 1
             tr.appendChild(td)
             td = document.createElement("td")
-            td.innerText = "Nome"
-            tr.appendChild(td)
-            td = document.createElement("td")
             td.innerText = nota.data
             tr.appendChild(td)
             td = document.createElement("td")

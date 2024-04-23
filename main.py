@@ -3,9 +3,19 @@ import settings
 import sqlite3 as sq
 import hashlib
 from datetime import datetime
+import time
 
 app = Flask(__name__)
 app.secret_key = settings.SECRET_KEY
+
+
+def query(sql, data):
+    con = sq.connect("data.db")
+    cur = con.cursor()
+    res = cur.execute(sql, data).fetchall()
+    con.commit()
+    con.close()
+    return res
 
 
 @app.route("/")
@@ -35,13 +45,10 @@ def add_nota_route():
 def add_nota():
     if "logged" not in session or not session["logged"]:
         return redirect("/login")
-    data = [session["id"], request.form["data"], request.form["importo"], 1]
-    con = sq.connect("data.db")
-    cur = con.cursor()
-    cur.execute("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", data)
-    con.close()
+    data = [time.mktime(datetime.strptime(request.form["data"],
+                                            "%Y-%m-%d").timetuple()), request.form["importo"], session["id"], 1]
+    query("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", data)
     return redirect("/")
-
 
 
 @app.post("/login")
@@ -50,22 +57,16 @@ def verify_login():
     hash_object = hashlib.sha256()
     hash_object.update(password.encode())
     hash_password = hash_object.hexdigest()
-    con = sq.connect("data.db")
-    cur = con.cursor()
-    res = cur.execute("SELECT * FROM Utente WHERE username=? AND password=?",
-                      [request.form["username"], hash_password]).fetchall()
+    res = query("SELECT * FROM Utente WHERE username=? AND password=?", [request.form["username"], hash_password])
     if len(res) > 0:
         session["logged"] = True
         session["user"] = request.form["username"]
-        session["role"] = cur.execute("SELECT Ruolo.nome FROM Utente INNER JOIN Ruolo ON Ruolo.id = Utente.idRuolo WHERE username=?",
-                    [request.form["username"]]).fetchall()[0][0]
+        session["role"] = query("SELECT Ruolo.nome FROM Utente INNER JOIN Ruolo ON Ruolo.id = Utente.idRuolo WHERE username=?",
+                    [request.form["username"]])
         session["id"] = res[0][0]
-        print(session["id"])
         session.modified = True
-        con.close()
         return redirect("/")
     else:
-        con.close()
         return redirect("/login")
 
 
@@ -74,12 +75,10 @@ def get_notes_of_user():
     if "logged" not in session or not session["logged"]:
         return redirect("/login")
     username = session["user"]
-    con = sq.connect("data.db")
-    cur = con.cursor()
-    res = cur.execute("SELECT Nota.*, Utente.nome, Tipologia.descrizione as descrizione FROM Nota "
+    res = query("SELECT Nota.*, Utente.nome, Tipologia.descrizione as descrizione FROM Nota "
                       "INNER JOIN Utente ON Utente.id = Nota.idUtente "
                       "INNER JOIN Tipologia ON Tipologia.id = Nota.idTipologia "
-                      "WHERE username=?", [username]).fetchall()
+                      "WHERE username=?", [username])
     res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'nome': row[5], 'tipologia': row[6]} for row in res]
     return res
 
@@ -102,11 +101,8 @@ def add_user():
     hash_object = hashlib.sha256()
     hash_object.update(password.encode())
     hash_password = hash_object.hexdigest()
-    con = sq.connect("data.db")
-    cur = con.cursor()
-    cur.execute("INSERT INTO Utente (nome, cognome, username, password, idRuolo) VALUES (?, ?, ?, ?, 2)",
+    query("INSERT INTO Utente (nome, cognome, username, password, idRuolo) VALUES (?, ?, ?, ?, 2)",
                 [request.form["nome"], request.form["cognome"], request.form["username"], hash_password])
-    con.close()
     return redirect("/")
 
 

@@ -38,7 +38,7 @@ def add_nota():
     data = [session["id"], request.form["data"], request.form["importo"], 1]
     con = sq.connect("data.db")
     cur = con.cursor()
-    cur.execute("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", [])
+    cur.execute("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", data)
     con.close()
     return redirect("/")
 

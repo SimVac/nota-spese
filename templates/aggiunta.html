@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="it" data-theme="sunset">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -9,6 +10,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Gestione Spese</title>
 </head>
+
 <body>
     <div class="flex flex-row">
         <div id="left-bar" class="flex flex-col h-screen w-2/12 bg-neutral">
@@ -29,28 +31,33 @@
                 </div>
             </div>
         </div>
-        <div class="w-10/12 h-2/6 flex flex-col justify-center items-center">
-            <div class="w-3/12 flex flex-col items-center">
-                <span>Aggiunta nota spesa</span>
-                <div>
-                    <form method="post" action="/api/add-nota">
-                        <div class="flex flex-col">
+        <div class="w-10/12 flex flex-col justify-center items-center h-screen">
+            <div class="w-4/12 flex flex-col justify-evenly items-center h-3/6">
+                <span class="text-4xl">Aggiunta nota spesa</span>
+                <form method="post" action="/api/add-nota" class="w-64">
+                    <div class="w-12/12">
+                        <div class="pb-6">
                             <input type="date" name="data" class="input input-bordered w-full max-w-xs">
-                            <input type="number" min="0" name="importo" class="input input-bordered w-full max-w-xs">
+                        </div>
+                        <div class="pb-6">
+                            <input type="number" min="0.0" name="importo"  placeholder="€" class="input input-bordered w-full max-w-xs">
+                        </div>
+                        <div class="pb-6">
                             <select id="" name="tipologia" class="select select-bordered w-full max-w-xs">
                                 <option value=""></option>
                                 <option value=""></option>
                                 <option value=""></option>
                             </select>
-                            <div class="flex justify-between">
-                                <a href="/"><button class="btn btn-ghost">Indietro</button></a>
-                                <button type="submit" class="btn">Invia</button>
-                            </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="flex justify-between">
+                            <a href="/"><button class="btn btn-ghost">Indietro</button></a>
+                            <button type="submit" class="btn">Invia</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </body>
+
 </html>

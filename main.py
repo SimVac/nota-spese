@@ -26,6 +26,11 @@ def login():
         return redirect("/")
 
 
+@app.route("/add-nota")
+def add_nota():
+    return render_template("aggiunta.html")
+
+
 @app.post("/login")
 def verify_login():
     password = request.form["password"]
@@ -34,11 +39,14 @@ def verify_login():
     hash_password = hash_object.hexdigest()
     con = sq.connect("data.db")
     cur = con.cursor()
-    res = cur.execute("SELECT * FROM Utente WHERE username=? AND password=?", [request.form["username"], hash_password]).fetchall()
+    res = cur.execute("SELECT * FROM Utente WHERE username=? AND password=?",
+                      [request.form["username"], hash_password]).fetchall()
     if len(res) > 0:
         session["logged"] = True
         session["user"] = request.form["username"]
-        session["role"] = cur.execute("SELECT Ruolo.nome FROM Utente INNER JOIN Ruolo ON Ruolo.id = Utente.idRuolo WHERE username=?", [request.form["username"]]).fetchall()[0][0]
+        session["role"] = \
+        cur.execute("SELECT Ruolo.nome FROM Utente INNER JOIN Ruolo ON Ruolo.id = Utente.idRuolo WHERE username=?",
+                    [request.form["username"]]).fetchall()[0][0]
         session.modified = True
         con.close()
         return redirect("/")
@@ -58,7 +66,8 @@ def get_notes_of_user():
                       "INNER JOIN Utente ON Utente.id = Nota.idUtente "
                       "INNER JOIN Tipologia ON Tipologia.id = Nota.idTipologia "
                       "WHERE username=?", [username]).fetchall()
-    res = [{'data': datetime.fromtimestamp(row[1]).strftime("%m/%d/%Y"), 'importo': row[2], 'tipologia': row[5]} for row in res]
+    res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'tipologia': row[5]} for row
+           in res]
     return res
 
 
@@ -83,7 +92,7 @@ def add_user():
     con = sq.connect("data.db")
     cur = con.cursor()
     cur.execute("INSERT INTO Utente (nome, cognome, username, password, idRuolo) VALUES (?, ?, ?, ?, 2)",
-                      [request.form["nome"], request.form["cognome"], request.form["username"], hash_password])
+                [request.form["nome"], request.form["cognome"], request.form["username"], hash_password])
     con.close()
     return redirect("/")
 

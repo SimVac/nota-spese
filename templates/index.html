@@ -74,15 +74,17 @@
                 </div>
                 <div class="flex items-center justify-center">
                     <div class="join">
-                        {% for i in range ({{page}}, {{page}}+4) %}
+                        {% for i in range (page, page+4 if page+4 <= max_page+1 else max_page+1) %}
                             <button class="join-item btn" onclick="(() => getDati({{i}}))()" id={{i}}>{{i}}</button>
                         {% endfor %}
+                        {% if max_page - page > 3 %}
                             <button class="join-item btn btn-disabled">...</button>
-                        <button class="join-item btn">{{max_page}}</button>
+                            <button class="join-item btn">{{max_page}}</button>
+                        {% endif %}
                     </div>
                 </div>
                 <script>
-                    btnP = document.getElementById(1)
+                    btnP = document.getElementById({{page}})
                     btnP.classList.add("btn-active")
                     function getDati(n){
                         console.log(n)
@@ -90,7 +92,6 @@
                         btnP.classList.remove("btn-active")
                         btn.classList.add("btn-active")
                         btnP = btn
-                        {{page}} = n
                         window.location.replace("/?page=" + n)
                         //document.reaload()
                     }

@@ -74,12 +74,27 @@
                 </div>
                 <div class="flex items-center justify-center">
                     <div class="join">
-                        <button class="join-item btn  btn-active">1</button>
-                        <button class="join-item btn">2</button>
-                        <button class="join-item btn">3</button>
-                        <button class="join-item btn">4</button>
+                        {% for i in range ({{page}}, {{page}}+4) %}
+                            <button class="join-item btn" onclick="(() => getDati({{i}}))()" id={{i}}>{{i}}</button>
+                        {% endfor %}
+                            <button class="join-item btn btn-disabled">...</button>
+                        <button class="join-item btn">{{max_page}}</button>
                     </div>
                 </div>
+                <script>
+                    btnP = document.getElementById(1)
+                    btnP.classList.add("btn-active")
+                    function getDati(n){
+                        console.log(n)
+                        btn = document.getElementById(n)
+                        btnP.classList.remove("btn-active")
+                        btn.classList.add("btn-active")
+                        btnP = btn
+                        {{page}} = n
+                        window.location.replace("/?page=" + n)
+                        //document.reaload()
+                    }
+                </script>
             </div>
         </div>
     </div>

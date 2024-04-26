@@ -81,15 +81,17 @@ def verify_login():
         return redirect("/login")
 
 
-@app.get("/api/user-notes")
-def get_notes_of_user():
+@app.get("/api/user-notes/<page>")
+def get_notes_of_user(page):
     if "logged" not in session or not session["logged"]:
         return redirect("/login")
     username = session["user"]
     res = query("SELECT Nota.*, Utente.nome, Tipologia.descrizione as descrizione FROM Nota "
                       "INNER JOIN Utente ON Utente.id = Nota.idUtente "
                       "INNER JOIN Tipologia ON Tipologia.id = Nota.idTipologia "
-                      "WHERE username=?", [username])
+                      "WHERE username=? "
+                      "LIMIT ?, 10", [username, page])
+    print(res)
     res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'nome': row[5], 'tipologia': row[6]} for row in res]
     return res
 

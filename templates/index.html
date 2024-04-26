@@ -74,18 +74,26 @@
                 </div>
                 <div class="flex items-center justify-center">
                     <div class="join">
-                        {% for i in range (page, page+4 if page+4 <= max_page+1 else max_page+1) %}
+                        <button class="join-item btn" id="indietro" onclick="(() => decrease({{page}}))()">«</button>
+                        {% for i in range (page if max_page - page > 3 else max_page - 3, page+4 if page+4 <= max_page+1 else max_page+1) %}
                             <button class="join-item btn" onclick="(() => getDati({{i}}))()" id={{i}}>{{i}}</button>
                         {% endfor %}
                         {% if max_page - page > 3 %}
                             <button class="join-item btn btn-disabled">...</button>
-                            <button class="join-item btn">{{max_page}}</button>
+                            <button class="join-item btn" onclick="(() => getDati({{max_page}}))()" id={{max_page}}>{{max_page}}</button>
                         {% endif %}
+                        <button class="join-item btn"  id="avanti" onclick="(() => increase({{page}}))()">»</button>
                     </div>
                 </div>
                 <script>
                     btnP = document.getElementById({{page}})
                     btnP.classList.add("btn-active")
+                    avanti = document.getElementById("avanti")
+                    indietro = document.getElementById("indietro")
+                    if ({{page}} == 1)
+                        indietro.classList.add("btn-disabled")
+                    if ({{page}} == 15)
+                        avanti.classList.add("btn-disabled")
                     function getDati(n){
                         console.log(n)
                         btn = document.getElementById(n)
@@ -94,6 +102,20 @@
                         btnP = btn
                         window.location.replace("/?page=" + n)
                         //document.reaload()
+                    }
+                    function decrease(page){
+                        console.log(btnP)
+                        btnP.classList.remove("btn-active")
+                        window.location.replace("/?page=" + (page-1))
+                        btn = document.getElementById(page - 1)
+                        btnP = btn
+                    }
+                    function increase(page){
+                        btn = document.getElementById(page + 1)
+                        btnP.classList.remove("btn-active")
+                        btnP = btn
+                        console.log(btnP)
+                        window.location.replace("/?page=" + (page+1))
                     }
                 </script>
             </div>

@@ -1,6 +1,9 @@
 const table = document.getElementById("tabellaSpese")
+var url = new URL(document.location.href);
+let page = url.searchParams.get("page") || 1
+console.log(`/api/user-notes/${page}`)
 
-fetch("/api/user-notes")
+fetch(`/api/user-notes/${page}`)
     .then(res => res.json())
     .then(data => {
         data.forEach((nota, idx) => {

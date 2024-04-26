@@ -86,13 +86,12 @@ def get_notes_of_user(page):
     if "logged" not in session or not session["logged"]:
         return redirect("/login")
     username = session["user"]
-    res = query("SELECT Nota.*, Utente.nome, Tipologia.descrizione as descrizione FROM Nota "
+    res = query("SELECT Nota.*, Tipologia.descrizione as descrizione FROM Nota "
                       "INNER JOIN Utente ON Utente.id = Nota.idUtente "
                       "INNER JOIN Tipologia ON Tipologia.id = Nota.idTipologia "
                       "WHERE username=? "
-                      "LIMIT ?, 10", [username, page])
-    print(res)
-    res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'nome': row[5], 'tipologia': row[6]} for row in res]
+                      "LIMIT ?, ?", [username, (int(page) - 1) * 10 if page else 0, int(page) * 10 if page else 10])
+    res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'tipologia': row[5]} for row in res]
     return res
 
 

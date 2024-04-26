@@ -100,7 +100,9 @@ def get_user_info():
     if "logged" not in session or not session["logged"]:
         return redirect("/login")
     username = session["user"]
-    return username
+    data = query("SELECT * FROM Utente WHERE Utente.username = ?", [username])[0]
+    print(data)
+    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6]).strftime("%d/%m/%Y")}
 
 
 @app.post("/api/add-user")

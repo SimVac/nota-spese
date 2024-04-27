@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it" data-theme="sunset">
+<html lang="it" data-theme="sunset" id="theme">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -12,7 +12,7 @@
 </head>
 <body>
     <div>
-        <h1 class="p-2 text-xl absolute">Gestione Spese</h1>
+        <h1 class="p-2 text-xl absolute" id="spese">Gestione Spese</h1>
     </div>
     <form method="post">
         <div class="flex flex-col justify-center items-center h-screen">
@@ -36,4 +36,17 @@
         </div>
     </form>
 </body>
+
+<script>
+    let theme = document.getElementById("theme")
+    console.log(theme)
+    const attuale = theme.getAttribute("data-theme");
+    console.log(attuale)
+
+    let nuovo = localStorage.getItem("theme") != null ? localStorage.getItem("theme") : "retro"
+    theme.setAttribute("data-theme", nuovo == "retro" ? "retro" : "sunset") 
+    localStorage.setItem("theme", nuovo)
+
+</script>
+
 </html>

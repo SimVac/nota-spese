@@ -10,27 +10,93 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Gestione Spese</title>
 </head>
+
 <body>
-    <div>
+    <div class="flex flex-row">
         <div id="left-bar" class="flex flex-col h-screen w-2/12 bg-neutral">
             <div class="h-1/6 flex justify-center items-center">
-                <span class="text-2xl"> Gestione spese </span>
+                <span class="text-2xl" id="spese"> Gestione spese </span>
             </div>
             <div class="flex flex-col justify-between items-center h-screen">
                 <div class="flex flex-col w-10/12">
                     <div class="p-2 flex justify-center">
-                        <a href="/" class="w-10/12"><button class="btn w-full btn-accent">Spese</button></a>
+                        <a href="/" class="w-10/12"><button class="btn w-full">Spese</button></a>
                     </div>
                     <div class="p-2 flex justify-center">
                         <button class="btn w-10/12">Utenti</button>
                     </div>
                 </div>
                 <div class="pb-4">
-                    <a href="/user"><button id="nome" class="text-2xl btn btn-ghost">Lorem Ipsum</button></a>
+                    <a href="/user"><button id="nome" class="text-2xl btn btn-ghost"></button></a>
+                </div>
+            </div>
+        </div>
+
+        <div class="w-10/12 flex flex-col justify-center items-center h-screen">
+            <div class="w-4/12 flex flex-col justify-evenly items-center h-3/6">
+                <span class="text-4xl" id="nome"></span>
+                <div class="w-96 text-2xl">
+                    <div class="pb-6 flex flex-row justify-between">
+                        <span>Data assunzione: </span>
+                    </div>
+                    <div class="pb-6 flex flex-row justify-between">
+                        <span>Spese toali: €</span>
+                    </div>
+                    <div class="pb-6">
+                        <span>Numero spese: </span>
+                    </div>
+                    <div class="pb-6 flex flex-row justify-between">
+                        <span>Ruolo: </span>
+                        <label class="flex cursor-pointer gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="5" />
+                                <path
+                                    d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4" />
+                            </svg>
+                            <input type="checkbox" value="retro" class="toggle theme-controller" id="theme" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                            </svg>
+                        </label>
+                    </div>
+
+                    <div class="flex justify-between flex-row-reverse pr-2 ">
+                        <a href="/"><button class="btn" type="button">Indietro</button></a>
+                    </div>
                 </div>
             </div>
         </div>
 
     </div>
 </body>
+
+<script>
+    let theme = document.getElementById("theme")
+
+    let nuovo = localStorage.getItem("theme") != null ? localStorage.getItem("theme") : "retro"
+    theme.checked = nuovo == "retro" ? true : false
+    localStorage.setItem("theme", nuovo)
+
+    theme.addEventListener("click", (event) => {
+        console.log("ok")
+        let attuale = localStorage.getItem("theme")
+        console.log(attuale)
+        if (attuale == "retro")
+            localStorage.setItem("theme", "sunset")
+        else
+            localStorage.setItem("theme", "retro")
+
+        location.reload()
+    })
+
+    if (localStorage.getItem("theme") == "retro"){
+        document.getElementById("spese").classList.add("text-base-100")
+        document.getElementById("nome").classList.add("text-base-100")
+    }
+</script>
+
 </html>

@@ -8,7 +8,7 @@ fetch(`/api/user-notes/${page}`)
         data.forEach((nota, idx) => {
             const tr = document.createElement("tr")
             let td = document.createElement("td")
-            td.innerText = idx + 1
+            td.innerText = (page-1) * 10 + idx + 1
             tr.appendChild(td)
             td = document.createElement("td")
             td.innerText = nota.data

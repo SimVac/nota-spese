@@ -27,7 +27,7 @@
                     </div>
                 </div>
                 <div class="pb-4">
-                    <a href="/user"><button id="nome" class="text-2xl btn btn-ghost">Lorem Ipsum</button></a>
+                    <a href="/user"><button id="nome" class="text-2xl btn btn-ghost"></button></a>
                 </div>
             </div>
         </div>
@@ -37,17 +37,15 @@
                 <form method="post" action="/api/add-nota" class="w-64">
                     <div class="w-12/12">
                         <div class="pb-6">
-                            <input type="date" name="data" class="input input-bordered w-full max-w-xs">
+                            <input type="date" name="data" class="input input-bordered w-full max-w-xs" required>
                         </div>
                         <div class="pb-6">
                             <input type="number" min="0" step="0.01" name="importo"
                                 class="input input-bordered w-full max-w-xs" placeholder="€">
                         </div>
                         <div class="pb-6">
-                            <select id="" name="tipologia" class="select select-bordered w-full max-w-xs">
-                                <option value=""></option>
-                                <option value=""></option>
-                                <option value=""></option>
+                            <select id="tipologia" name="tipologia" class="select select-bordered w-full max-w-xs" required>
+                                <option selected disabled>Scegli Tipologia</option>
                             </select>
                         </div>
                         <div class="flex justify-between flex-row-reverse">
@@ -60,6 +58,7 @@
             </div>
         </div>
     </div>
+    <script src="./static/aggiunta.js"></script>
 </body>
 
 <script>

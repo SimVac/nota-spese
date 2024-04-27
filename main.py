@@ -9,7 +9,9 @@ app = Flask(__name__)
 app.secret_key = settings.SECRET_KEY
 
 
-def query(sql, data):
+def query(sql, data=None):
+    if data is None:
+        data = []
     con = sq.connect("data.db")
     cur = con.cursor()
     res = cur.execute(sql, data).fetchall()
@@ -57,7 +59,7 @@ def add_nota():
     if "logged" not in session or not session["logged"]:
         return redirect("/login")
     data = [time.mktime(datetime.strptime(request.form["data"],
-                                            "%Y-%m-%d").timetuple()), request.form["importo"], session["id"], 1]
+                                            "%Y-%m-%d").timetuple()), request.form["importo"], session["id"], request.form["tipologia"]]
     query("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", data)
     return redirect("/")
 
@@ -118,6 +120,14 @@ def add_user():
     query("INSERT INTO Utente (nome, cognome, username, password, idRuolo) VALUES (?, ?, ?, ?, 2)",
                 [request.form["nome"], request.form["cognome"], request.form["username"], hash_password])
     return redirect("/")
+
+
+@app.get("/api/tipologie")
+def get_tipologie():
+    if "logged" not in session or not session["logged"]:
+        return redirect("/login")
+    tipologie = query("SELECT * FROM Tipologia")
+    return [{"id": tipologia[0], "descrizione": tipologia[1]} for tipologia in tipologie]
 
 
 if __name__ == "__main__":

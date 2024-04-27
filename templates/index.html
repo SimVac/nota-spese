@@ -77,7 +77,7 @@
                 <div class="flex items-center justify-center">
                     <div class="join">
                         <button class="join-item btn" id="indietro" onclick="(() => decrease({{page}}))()">«</button>
-                        {% for i in range (page if max_page - page > 3 else max_page - 3, page+4 if page+4 <= max_page+1 else max_page+1) %}
+                        {% for i in range (page if max_page - page > 3 else (max_page - 3 if max_page -3 > 0 else 1), page+4 if page+4 <= max_page+1 else max_page+1) %}
                             <button class="join-item btn" onclick="(() => getDati({{i}}))()" id={{i}}>{{i}}</button>
                         {% endfor %}
                         {% if max_page - page > 3 %}
@@ -98,7 +98,7 @@
                     indietro = document.getElementById("indietro")
                     if ({{page}} == 1)
                         indietro.classList.add("btn-disabled")
-                    if ({{page}} == 15)
+                    if ({{page}} == {{max_page}})
                         avanti.classList.add("btn-disabled")
                     function getDati(n){
                         console.log(n)

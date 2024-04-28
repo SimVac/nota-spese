@@ -75,7 +75,7 @@ def verify_login():
         session["logged"] = True
         session["user"] = request.form["username"]
         session["role"] = query("SELECT Ruolo.nome FROM Utente INNER JOIN Ruolo ON Ruolo.id = Utente.idRuolo WHERE username=?",
-                    [request.form["username"]])
+                    [request.form["username"]])[0][0]
         session["id"] = res[0][0]
         session.modified = True
         return redirect("/")
@@ -103,8 +103,7 @@ def get_user_info():
         return redirect("/login")
     username = session["user"]
     data = query("SELECT * FROM Utente WHERE Utente.username = ?", [username])[0]
-    print(data)
-    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6]).strftime("%d/%m/%Y")}
+    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y")}
 
 
 @app.post("/api/add-user")
@@ -117,8 +116,9 @@ def add_user():
     hash_object = hashlib.sha256()
     hash_object.update(password.encode())
     hash_password = hash_object.hexdigest()
-    query("INSERT INTO Utente (nome, cognome, username, password, idRuolo) VALUES (?, ?, ?, ?, 2)",
-                [request.form["nome"], request.form["cognome"], request.form["username"], hash_password])
+    query("INSERT INTO Utente (nome, cognome, username, password, dataAssunzione, idRuolo) VALUES (?, ?, ?, ?, ?, 2)",
+                [request.form["nome"], request.form["cognome"], request.form["username"], hash_password, time.mktime(datetime.strptime(request.form["data"],
+                                            "%Y-%m-%d").timetuple())])
     return redirect("/")
 
 
@@ -128,6 +128,17 @@ def get_tipologie():
         return redirect("/login")
     tipologie = query("SELECT * FROM Tipologia")
     return [{"id": tipologia[0], "descrizione": tipologia[1]} for tipologia in tipologie]
+
+
+@app.get("/api/users")
+def get_all_users():
+    if "logged" not in session or not session["logged"]:
+        return redirect("/login")
+    if session["role"] != "admin":
+        return "Need admin role!", 403
+    res = query("SELECT * FROM Utente INNER JOIN Ruolo ON Utente.idRuolo = Ruolo.id")
+    return [{"nome": row[1], "cognome": row[2], "username": row[4], "dataAssunzione": datetime.fromtimestamp(row[6]).strftime("%d/%m/%Y"), "ruolo": row[8]} for row in res]
+
 
 
 if __name__ == "__main__":

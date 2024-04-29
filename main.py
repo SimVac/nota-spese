@@ -112,6 +112,8 @@ def add_user():
         return redirect("/login")
     if session["role"] != "admin":
         return "Need admin role!", 403
+    if len(query("SELECT * FROM Utente WHERE username = ?", [request.form["username"]])) > 0:
+        return redirect("/")
     password = request.form["password"]
     hash_object = hashlib.sha256()
     hash_object.update(password.encode())

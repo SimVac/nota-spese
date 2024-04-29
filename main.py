@@ -8,6 +8,24 @@ import time
 app = Flask(__name__)
 app.secret_key = settings.SECRET_KEY
 
+@app.before_request
+def login_middleware():
+    path = request.path
+    protected_routes = ["/", "/add-nota", "/user", "/api/add-nota", "/api/user-info",
+                        "/api/add-user", "/api/tipologie", "/api/users"]
+    dynamic_protected_routes = ["/api/user-notes"]
+    if (path in protected_routes or any([path.startswith(route) for route in dynamic_protected_routes])) and ("logged" not in session or not session["logged"]):
+        session["logged"] = False
+        session.modified = True
+        return redirect("/login")
+
+@app.before_request
+def permissions():
+    path = request.path
+    protected_routes = ["/api/users", "/api/add-user"]
+    if path in protected_routes and (session.get("role") != "admin"):
+        return "Need admin role!", 403
+
 
 def query(sql, data=None):
     if data is None:
@@ -22,14 +40,9 @@ def query(sql, data=None):
 
 @app.route("/")
 def index():
-    if "logged" not in session or not session["logged"]:
-        session["logged"] = False
-        session.modified = True
-        return redirect("/login")
-    else:
-        page = request.args.get('page') if request.args.get('page') else 1
-        max_page = query("SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [session["user"]])[0][0] // 10 + 1
-        return render_template("index.html", page=int(page), max_page=max_page)
+    page = request.args.get('page') if request.args.get('page') else 1
+    max_page = query("SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [session["user"]])[0][0] // 10 + 1
+    return render_template("index.html", page=int(page), max_page=max_page)
 
 
 @app.route("/login")
@@ -42,22 +55,16 @@ def login():
 
 @app.route("/add-nota")
 def add_nota_route():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
     return render_template("aggiunta.html")
 
 
 @app.route("/user")
 def user_route():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
     return render_template("utente.html")
 
 
 @app.post("/api/add-nota")
 def add_nota():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
     data = [time.mktime(datetime.strptime(request.form["data"],
                                             "%Y-%m-%d").timetuple()), request.form["importo"], session["id"], request.form["tipologia"]]
     query("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", data)
@@ -85,8 +92,6 @@ def verify_login():
 
 @app.get("/api/user-notes/<page>")
 def get_notes_of_user(page):
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
     username = session["user"]
     res = query("SELECT Nota.*, Tipologia.descrizione as descrizione FROM Nota "
                       "INNER JOIN Utente ON Utente.id = Nota.idUtente "
@@ -99,8 +104,6 @@ def get_notes_of_user(page):
 
 @app.get("/api/user-info")
 def get_user_info():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
     username = session["user"]
     data = query("SELECT * FROM Utente WHERE Utente.username = ?", [username])[0]
     return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y")}
@@ -108,10 +111,6 @@ def get_user_info():
 
 @app.post("/api/add-user")
 def add_user():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
-    if session["role"] != "admin":
-        return "Need admin role!", 403
     if len(query("SELECT * FROM Utente WHERE username = ?", [request.form["username"]])) > 0:
         return redirect("/")
     password = request.form["password"]
@@ -126,18 +125,12 @@ def add_user():
 
 @app.get("/api/tipologie")
 def get_tipologie():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
     tipologie = query("SELECT * FROM Tipologia")
     return [{"id": tipologia[0], "descrizione": tipologia[1]} for tipologia in tipologie]
 
 
 @app.get("/api/users")
 def get_all_users():
-    if "logged" not in session or not session["logged"]:
-        return redirect("/login")
-    if session["role"] != "admin":
-        return "Need admin role!", 403
     res = query("SELECT * FROM Utente INNER JOIN Ruolo ON Utente.idRuolo = Ruolo.id")
     return [{"nome": row[1], "cognome": row[2], "username": row[4], "dataAssunzione": datetime.fromtimestamp(row[6]).strftime("%d/%m/%Y"), "ruolo": row[8]} for row in res]
 

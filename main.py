@@ -8,11 +8,12 @@ import time
 app = Flask(__name__)
 app.secret_key = settings.SECRET_KEY
 
+
 @app.before_request
 def login_middleware():
     path = request.path
     protected_routes = ["/", "/add-nota", "/user", "/api/add-nota", "/api/user-info",
-                        "/api/add-user", "/api/tipologie", "/api/users", "/users"]
+                        "/api/add-user", "/api/tipologie", "/api/users", "/users", "/api/roles"]
     dynamic_protected_routes = ["/api/user-notes"]
     if (path in protected_routes or any([path.startswith(route) for route in dynamic_protected_routes])) and ("logged" not in session or not session["logged"]):
         session["logged"] = False
@@ -22,7 +23,7 @@ def login_middleware():
 @app.before_request
 def permissions():
     path = request.path
-    protected_routes = ["/api/users", "/api/add-user", "/users"]
+    protected_routes = ["/api/users", "/api/add-user", "/users", "/api/roles"]
     if path in protected_routes and (session.get("role") != "admin"):
         return "Need admin role!", 403
 
@@ -60,7 +61,13 @@ def add_nota_route():
 
 @app.route("/user")
 def user_route():
-    return render_template("utente.html", is_admin=session["ruolo"]=="admin")
+    user_info = get_user_info()
+    return render_template("utente.html", is_admin=session["role"]=="admin", user_info=user_info)
+
+
+@app.route("/add-user")
+def add_user_route():
+    return render_template("aggiunta_utente.html")
 
 
 @app.route("/users")
@@ -139,6 +146,11 @@ def get_all_users():
     res = query("SELECT * FROM Utente INNER JOIN Ruolo ON Utente.idRuolo = Ruolo.id")
     return [{"nome": row[1], "cognome": row[2], "username": row[4], "dataAssunzione": datetime.fromtimestamp(row[6]).strftime("%d/%m/%Y"), "ruolo": row[8]} for row in res]
 
+
+@app.get("/api/roles")
+def get_all_roles():
+    res = query("SELECT * FROM Ruolo")
+    return [{'id': row[0], 'nome': row[1]} for row in res]
 
 
 if __name__ == "__main__":

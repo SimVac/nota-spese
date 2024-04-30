@@ -70,6 +70,11 @@ def user_route():
     return render_template("utente.html", is_admin=session["role"]=="admin", user_info=user_info)
 
 
+@app.route("/add-user")
+def add_user():
+    return render_template("aggiunta_utente.html")
+
+
 @app.route("/users")
 def users_route():
     return render_template("dipendenti.html")

@@ -117,7 +117,11 @@ def get_notes_of_user(page):
 def get_user_info():
     username = session["user"]
     data = query("SELECT * FROM Utente WHERE Utente.username = ?", [username])[0]
-    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y")}
+    spese_totali = query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.nome = ?", [username])
+    numero_spese = query(
+        "SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.nome = ?",
+        [username])
+    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y"), "speseTotali": spese_totali, "numeroSpese": numero_spese}
 
 
 @app.post("/api/add-user")

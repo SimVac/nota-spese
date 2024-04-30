@@ -66,7 +66,8 @@ def add_nota_route():
 
 @app.route("/user")
 def user_route():
-    return render_template("utente.html", is_admin=session["role"]=="admin")
+    user_info = get_user_info()
+    return render_template("utente.html", is_admin=session["role"]=="admin", user_info=user_info)
 
 
 @app.route("/users")
@@ -116,12 +117,12 @@ def get_notes_of_user(page):
 @app.get("/api/user-info")
 def get_user_info():
     username = session["user"]
-    data = query("SELECT * FROM Utente WHERE Utente.username = ?", [username])[0]
-    spese_totali = query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.nome = ?", [username])
+    data = query("SELECT * FROM Utente INNER JOIN Ruolo ON Utente.idRuolo = Ruolo.id WHERE Utente.username = ?", [username])[0]
+    spese_totali = round(query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [username])[0][0], 2)
     numero_spese = query(
-        "SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.nome = ?",
-        [username])
-    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y"), "speseTotali": spese_totali, "numeroSpese": numero_spese}
+        "SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?",
+        [username])[0][0]
+    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y"), "speseTotali": spese_totali, "numeroSpese": numero_spese, "ruolo": data[8].title()}
 
 
 @app.post("/api/add-user")

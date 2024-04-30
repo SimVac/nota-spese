@@ -23,10 +23,10 @@
                         <a href="/" class="w-10/12"><button class="btn w-full">Spese</button></a>
                     </div>
                     <div class="p-2 flex justify-center">
-                        {% if admin %}
-                            <a href="/dipendenti"></a><button class="btn w-10/12">Utenti</button>
+                        {% if is_admin %}
+                            <a href="/users" class="w-10/12"><button class="btn w-full">Utenti</button></a>
                         {%else%} 
-                            <a href="/dipendenti"></a><button class="btn w-10/12 btn-disabled">Utenti</button>
+                            <a href="/users" class="w-10/12"><button class="btn w-full btn-disabled">Utenti</button></a>
                         {% endif %}
                     </div>
                 </div>

@@ -41,16 +41,16 @@
                 <span class="text-4xl" id="nome"></span>
                 <div class="w-96 text-2xl">
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Data assunzione: </span>
+                        <span>Data assunzione: {{ user_info["dataAssunzione"] }}</span>
                     </div>
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Spese toali: €</span>
+                        <span>Spese totali: {{user_info["speseTotali"]}}€</span>
                     </div>
                     <div class="pb-6">
-                        <span>Numero spese: </span>
+                        <span>Numero spese: {{user_info["numeroSpese"]}}</span>
                     </div>
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Ruolo: </span>
+                        <span>Ruolo: {{user_info["ruolo"]}}</span>
                         <label class="flex cursor-pointer gap-2 pt-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

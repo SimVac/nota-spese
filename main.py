@@ -12,7 +12,7 @@ app.secret_key = settings.SECRET_KEY
 def login_middleware():
     path = request.path
     protected_routes = ["/", "/add-nota", "/user", "/api/add-nota", "/api/user-info",
-                        "/api/add-user", "/api/tipologie", "/api/users"]
+                        "/api/add-user", "/api/tipologie", "/api/users", "/users"]
     dynamic_protected_routes = ["/api/user-notes"]
     if (path in protected_routes or any([path.startswith(route) for route in dynamic_protected_routes])) and ("logged" not in session or not session["logged"]):
         session["logged"] = False
@@ -22,7 +22,7 @@ def login_middleware():
 @app.before_request
 def permissions():
     path = request.path
-    protected_routes = ["/api/users", "/api/add-user"]
+    protected_routes = ["/api/users", "/api/add-user", "/users"]
     if path in protected_routes and (session.get("role") != "admin"):
         return "Need admin role!", 403
 
@@ -42,7 +42,7 @@ def query(sql, data=None):
 def index():
     page = request.args.get('page') if request.args.get('page') else 1
     max_page = query("SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [session["user"]])[0][0] // 10 + 1
-    return render_template("index.html", page=int(page), max_page=max_page)
+    return render_template("index.html", page=int(page), max_page=max_page, is_admin=session["ruolo"]=="admin")
 
 
 @app.route("/login")
@@ -55,12 +55,17 @@ def login():
 
 @app.route("/add-nota")
 def add_nota_route():
-    return render_template("aggiunta.html")
+    return render_template("aggiunta.html", is_admin=session["ruolo"]=="admin")
 
 
 @app.route("/user")
 def user_route():
-    return render_template("utente.html")
+    return render_template("utente.html", is_admin=session["ruolo"]=="admin")
+
+
+@app.route("/users")
+def users_route():
+    return render_template("dipendenti.html")
 
 
 @app.post("/api/add-nota")

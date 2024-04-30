@@ -23,11 +23,15 @@
                         <a href="/" class="w-10/12"><button class="btn w-full">Spese</button></a>
                     </div>
                     <div class="p-2 flex justify-center">
-                        <button class="btn w-10/12">Utenti</button>
+                        {% if is_admin %}
+                            <a href="/users" class="w-10/12"><button class="btn w-full">Utenti</button></a>
+                        {%else%} 
+                            <a href="/users" class="w-10/12"><button class="btn w-full btn-disabled">Utenti</button></a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="pb-4">
-                    <a href="/user"><button id="nome" class="text-2xl btn btn-ghost"></button></a>
+                    <a href="/user"><button id="btn_nome" class="text-2xl btn btn-ghost"></button></a>
                 </div>
             </div>
         </div>
@@ -37,17 +41,17 @@
                 <span class="text-4xl" id="nome"></span>
                 <div class="w-96 text-2xl">
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Data assunzione: </span>
+                        <span>Data assunzione: {{ user_info["dataAssunzione"] }}</span>
                     </div>
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Spese toali: €</span>
+                        <span>Spese totali: {{user_info["speseTotali"]}}€</span>
                     </div>
                     <div class="pb-6">
-                        <span>Numero spese: </span>
+                        <span>Numero spese: {{user_info["numeroSpese"]}}</span>
                     </div>
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Ruolo: </span>
-                        <label class="flex cursor-pointer gap-2">
+                        <span>Ruolo: {{user_info["ruolo"]}}</span>
+                        <label class="flex cursor-pointer gap-2 pt-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                                 stroke-linejoin="round">
@@ -66,6 +70,7 @@
 
                     <div class="flex justify-between flex-row-reverse pr-2 ">
                         <a href="/"><button class="btn" type="button">Indietro</button></a>
+                        <a href="/logout"><button class="btn btn-ghost">Logout</button></a>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 fetch("/api/user-info")
     .then(res => res.json())
     .then(user => {
-        let btn = document.getElementById("nome")
+        let btn = document.getElementById("btn_nome")
         btn.innerText = `${user.nome} ${user.cognome}`
     })
 

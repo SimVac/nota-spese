@@ -23,7 +23,11 @@
                         <a href="/" class="w-10/12"><button class="btn w-full btn-accent">Spese</button></a>
                     </div>
                     <div class="p-2 flex justify-center">
-                        <button class="btn w-10/12">Utenti</button>
+                        {% if is_admin %}
+                            <a href="/users" class="w-10/12"><button class="btn w-full">Utenti</button></a>
+                        {%else%} 
+                            <a href="/users" class="w-10/12"><button class="btn w-full btn-disabled">Utenti</button></a>
+                        {% endif %}
                     </div>
                 </div>
                 <div class="pb-4">

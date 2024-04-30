@@ -43,7 +43,7 @@ def query(sql, data=None):
 def index():
     page = request.args.get('page') if request.args.get('page') else 1
     max_page = query("SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [session["user"]])[0][0] // 10 + 1
-    return render_template("index.html", page=int(page), max_page=max_page, is_admin=session["ruolo"]=="admin")
+    return render_template("index.html", page=int(page), max_page=max_page, is_admin=session["role"]=="admin")
 
 
 @app.route("/login")
@@ -54,9 +54,15 @@ def login():
         return redirect("/")
 
 
+@app.get("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+
 @app.route("/add-nota")
 def add_nota_route():
-    return render_template("aggiunta.html", is_admin=session["ruolo"]=="admin")
+    return render_template("aggiunta.html", is_admin=session["role"]=="admin")
 
 
 @app.route("/user")
@@ -117,8 +123,12 @@ def get_notes_of_user(page):
 @app.get("/api/user-info")
 def get_user_info():
     username = session["user"]
-    data = query("SELECT * FROM Utente WHERE Utente.username = ?", [username])[0]
-    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y")}
+    data = query("SELECT * FROM Utente INNER JOIN Ruolo ON Utente.idRuolo = Ruolo.id WHERE Utente.username = ?", [username])[0]
+    spese_totali = round(query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [username])[0][0], 2)
+    numero_spese = query(
+        "SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?",
+        [username])[0][0]
+    return {'nome': data[1], 'cognome': data[2], 'username': data[4], 'dataAssunzione': datetime.fromtimestamp(data[6] if data[6] else 0).strftime("%d/%m/%Y"), "speseTotali": spese_totali, "numeroSpese": numero_spese, "ruolo": data[8].title()}
 
 
 @app.post("/api/add-user")

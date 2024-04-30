@@ -41,7 +41,7 @@
                 <form method="post" action="/api/add-user" class="w-64">
                     <div class="w-12/12">
                         <div class="pb-6">
-                            <input type="text" name="data" class="input input-bordered w-full max-w-xs" placeholder="Nome" required>
+                            <input type="text" name="nome" class="input input-bordered w-full max-w-xs" placeholder="Nome" required>
                         </div>
                         <div class="pb-6">
                             <input type="text" name="cognome"
@@ -52,7 +52,7 @@
                                 class="input input-bordered w-full max-w-xs" placeholder="Username">
                         </div>
                         <div class="pb-6">
-                            <select id="ruolo" name="tipologia" class="select select-bordered w-full max-w-xs" required>
+                            <select id="ruolo" name="ruolo" class="select select-bordered w-full max-w-xs" required>
                                 <option selected disabled>Ruolo</option>
                             </select>
                         </div>
@@ -70,7 +70,7 @@
             </div>
         </div>
     </div>
-    <script src="./static/aggiunta.js"></script>
+    <script src="./static/aggiunta_utente.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="sunset" id="theme">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Gestione Spese</title>
+</head>
+
+<body>
+    <div class="flex flex-row">
+        <div id="left-bar" class="flex flex-col h-screen w-2/12 bg-neutral">
+            <div class="h-1/6 flex justify-center items-center">
+                <span class="text-2xl" id="spese"> Gestione spese </span>
+            </div>
+            <div class="flex flex-col justify-between items-center h-screen">
+                <div class="flex flex-col w-10/12">
+                    <div class="p-2 flex justify-center">
+                        <a href="/" class="w-10/12"><button class="btn w-full">Spese</button></a>
+                    </div>
+                    <div class="p-2 flex justify-center">
+                        <a href="/users" class="w-10/12"><button class="btn w-full btn-accent">Utenti</button></a>
+                    </div>
+                </div>
+                <div class="pb-4">
+                    <a href="/user"><button id="nome" class="text-2xl btn btn-ghost"></button></a>
+                </div>
+            </div>
+        </div>
+        <div id="content" class="h-screen w-10/12">
+            <div class="flex flex-row justify-between w-12/12 h-32 items-center p-8">
+                <span class="text-4xl">
+                    DIPENDENTI
+                </span>
+                <!-- You can open the modal using ID.showModal() method -->
+
+                <a href="add-nota">
+                    <button class="btn btn-neutral">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5"
+                            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px"
+                            viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+                            <g>
+                                <path
+                                    d="M480,224H288V32c0-17.673-14.327-32-32-32s-32,14.327-32,32v192H32c-17.673,0-32,14.327-32,32s14.327,32,32,32h192v192   c0,17.673,14.327,32,32,32s32-14.327,32-32V288h192c17.673,0,32-14.327,32-32S497.673,224,480,224z" />
+                            </g>
+                        </svg>
+                        Add
+                    </button>
+                </a>
+
+
+            </div>
+            <div class="flex flex-col justify-start h-3/4">
+                <div class="overflow-x-auto  p-10">
+                    <table class="table table-zebra" id="tabellaSpese">
+                        <!-- head -->
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Nome</th>
+                                <th>Cognome</th>
+                                <th>Username</th>
+                                <th>Data assunzione</th>
+                                <th>Ruolo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="./static/index.js"></script>
+</body>
+
+</html>

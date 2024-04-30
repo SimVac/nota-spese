@@ -37,24 +37,32 @@
         </div>
         <div class="w-10/12 flex flex-col justify-center items-center h-screen">
             <div class="w-4/12 flex flex-col justify-evenly items-center h-3/6">
-                <span class="text-4xl">Aggiunta nota spesa</span>
-                <form method="post" action="/api/add-nota" class="w-64">
+                <span class="text-4xl">Aggiungi nuovo utente</span>
+                <form method="post" action="/api/add-utente" class="w-64">
                     <div class="w-12/12">
                         <div class="pb-6">
-                            <input type="date" name="data" class="input input-bordered w-full max-w-xs" required>
+                            <input type="text" name="data" class="input input-bordered w-full max-w-xs" placeholder="Nome" required>
                         </div>
                         <div class="pb-6">
-                            <input type="number" min="0" step="0.01" name="importo"
-                                class="input input-bordered w-full max-w-xs" placeholder="€">
+                            <input type="text" name="cognome"
+                                class="input input-bordered w-full max-w-xs" placeholder="Cognome">
                         </div>
                         <div class="pb-6">
-                            <select id="tipologia" name="tipologia" class="select select-bordered w-full max-w-xs" required>
-                                <option selected disabled>Scegli Tipologia</option>
+                            <input type="text" name="username"
+                                class="input input-bordered w-full max-w-xs" placeholder="Username">
+                        </div>
+                        <div class="pb-6">
+                            <select id="ruolo" name="tipologia" class="select select-bordered w-full max-w-xs" required>
+                                <option selected disabled>Ruolo</option>
                             </select>
                         </div>
+                        <div class="pb-6">
+                            <input type="password" name="password"
+                                class="input input-bordered w-full max-w-xs" placeholder="Password">
+                        </div>
                         <div class="flex justify-between flex-row-reverse">
-                            <button type="submit" class="btn">Invia</button>
-                            <a href="/"><button class="btn btn-ghost" type="button">Indietro</button></a>
+                            <button type="submit" class="btn">Inserisci</button>
+                            <a href="/"><button class="btn btn-ghost" type="button">Annulla</button></a>
                         </div>
                     </div>
                 </form>

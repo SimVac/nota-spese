@@ -53,6 +53,12 @@ def login():
         return redirect("/")
 
 
+@app.get("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
+
+
 @app.route("/add-nota")
 def add_nota_route():
     return render_template("aggiunta.html", is_admin=session["role"]=="admin")
@@ -93,9 +99,6 @@ def verify_login():
         return redirect("/")
     else:
         return redirect("/login")
-
-
-
 
 
 @app.get("/api/user-notes/<page>")

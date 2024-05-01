@@ -150,6 +150,7 @@ cmake-build-*/
 
 .vscode/
 images/
+data.db
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml

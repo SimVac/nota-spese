@@ -15,6 +15,7 @@ fetch(`/api/user-notes/${page}`)
             tr.appendChild(td)
             td = document.createElement("td")
             td.innerText = nota.tipologia
+            console.log(nota.tipologia)
             tr.appendChild(td)
             td = document.createElement("td")
             td.innerText = nota.importo

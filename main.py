@@ -83,9 +83,14 @@ def users_route():
 
 @app.post("/api/add-nota")
 def add_nota():
+    image = request.files["image"]
+    username = session["user"]
+    timestamp = str(time.time())
+    file_name = f"{username}_{timestamp}.{image.filename.split('.')[-1]}"
+    image.save(f"images/{file_name}")
     data = [time.mktime(datetime.strptime(request.form["data"],
-                                            "%Y-%m-%d").timetuple()), request.form["importo"], session["id"], request.form["tipologia"]]
-    query("INSERT INTO Nota (data, importo, idUtente, idTipologia) VALUES (?, ?, ?, ?)", data)
+                                            "%Y-%m-%d").timetuple()), request.form["importo"], session["id"], request.form["tipologia"], file_name]
+    query("INSERT INTO Nota (data, importo, idUtente, idTipologia, immagine) VALUES (?, ?, ?, ?, ?)", data)
     return redirect("/")
 
 
@@ -161,16 +166,6 @@ def get_all_users():
 def get_all_roles():
     res = query("SELECT * FROM Ruolo")
     return [{'id': row[0], 'nome': row[1]} for row in res]
-
-
-
-@app.post("/api/image")
-def upload_image():
-    image = request.files["image"]
-    username = session["user"]
-    id = query("SELECT COUNT(*) FROM Immagine WHERE username = ?", [username])[0][0] + 1
-    image.save(f"images/{username}_{id}.png")
-    return redirect("/")
 
 
 

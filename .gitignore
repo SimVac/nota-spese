@@ -149,6 +149,7 @@ pip-selfcheck.json
 cmake-build-*/
 
 .vscode/
+images/
 
 # Mongo Explorer plugin
 .idea/**/mongoSettings.xml

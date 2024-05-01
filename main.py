@@ -1,12 +1,17 @@
-from flask import Flask, render_template, redirect, session, request
+from flask import Flask, render_template, redirect, session, request, send_from_directory
 import settings
 import sqlite3 as sq
 import hashlib
 from datetime import datetime
 import time
+import os
 
 app = Flask(__name__)
 app.secret_key = settings.SECRET_KEY
+
+if not os.path.exists("images"):
+    os.makedirs("images")
+
 
 
 @app.before_request
@@ -14,7 +19,7 @@ def login_middleware():
     path = request.path
     protected_routes = ["/", "/add-nota", "/user", "/api/add-nota", "/api/user-info",
                         "/api/add-user", "/api/tipologie", "/api/users", "/users", "/api/roles"]
-    dynamic_protected_routes = ["/api/user-notes"]
+    dynamic_protected_routes = ["/api/user-notes", "/api/image"]
     if (path in protected_routes or any([path.startswith(route) for route in dynamic_protected_routes])) and ("logged" not in session or not session["logged"]):
         session["logged"] = False
         session.modified = True
@@ -121,7 +126,7 @@ def get_notes_of_user(page):
                       "INNER JOIN Tipologia ON Tipologia.id = Nota.idTipologia "
                       "WHERE username=? "
                       "LIMIT ?, ?", [username, (int(page) - 1) * 10 if page else 0, int(page) * 10 if page else 10])
-    res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'tipologia': row[5]} for row in res]
+    res = [{'data': datetime.fromtimestamp(row[1]).strftime("%d/%m/%Y"), 'importo': row[2], 'allegato': row[5], 'tipologia': row[6]} for row in res]
     return res
 
 
@@ -129,7 +134,11 @@ def get_notes_of_user(page):
 def get_user_info():
     username = session["user"]
     data = query("SELECT * FROM Utente INNER JOIN Ruolo ON Utente.idRuolo = Ruolo.id WHERE Utente.username = ?", [username])[0]
-    spese_totali = round(query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [username])[0][0], 2)
+    spese_totali = 0
+    result = query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [username])
+    if result[0][0] is not None:
+        spese_totali = round(result[0][0], 2)
+    #spese_totali = round(query("SELECT SUM(Nota.importo) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [username])[0][0], 2)
     numero_spese = query(
         "SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?",
         [username])[0][0]
@@ -166,6 +175,17 @@ def get_all_users():
 def get_all_roles():
     res = query("SELECT * FROM Ruolo")
     return [{'id': row[0], 'nome': row[1]} for row in res]
+
+
+
+@app.get("/api/image/<file_name>")
+def get_image(file_name):
+    splitted_file_name = file_name.split('_')
+    if splitted_file_name[0] != session["user"]:
+        return "Not your file!", 403
+    if not os.path.exists(f"images/{file_name}"):
+        return "File not found!", 404
+    return send_from_directory("images", file_name)
 
 
 

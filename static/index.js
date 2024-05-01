@@ -21,7 +21,11 @@ fetch(`/api/user-notes/${page}`)
             td.innerText = nota.importo
             tr.appendChild(td)
             td = document.createElement("td")
-            td.innerText = "Allegati"
+            a = document.createElement("a")
+            a.download = nota.allegato
+            a.href = `/api/image/${nota.allegato}`
+            a.innerText = "Allegato"
+            td.appendChild(a)
             tr.appendChild(td)
             table.appendChild(tr)
         });

@@ -163,5 +163,16 @@ def get_all_roles():
     return [{'id': row[0], 'nome': row[1]} for row in res]
 
 
+
+@app.post("/api/image")
+def upload_image():
+    image = request.files["image"]
+    username = session["user"]
+    id = query("SELECT COUNT(*) FROM Immagine WHERE username = ?", [username])[0][0] + 1
+    image.save(f"images/{username}_{id}.png")
+    return redirect("/")
+
+
+
 if __name__ == "__main__":
     app.run(debug=True)

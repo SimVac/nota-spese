@@ -82,7 +82,7 @@
                     </div>
                 </div>
                 <script>
-                    btnP = document.getElementById(1)
+                    btnP = document.getElementById({{page}})
                     btnP.classList.add("btn-active")
                     function getDati(n){
                         console.log(n)
@@ -90,7 +90,6 @@
                         btnP.classList.remove("btn-active")
                         btn.classList.add("btn-active")
                         btnP = btn
-                        {{page}} = n
                         window.location.replace("/?page=" + n)
                         //document.reaload()
                     }

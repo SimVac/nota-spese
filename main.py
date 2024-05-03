@@ -27,7 +27,7 @@ def index():
     else:
         page = request.args.get('page') if request.args.get('page') else 1
         max_page = query("SELECT COUNT(*) FROM Nota INNER JOIN Utente ON Nota.idUtente = Utente.id WHERE Utente.username = ?", [session["user"]])[0][0] // 10 + 1
-        return render_template("index.html", page=page, max_page=max_page)
+        return render_template("index.html", page=int(page), max_page=15)
 
 
 @app.route("/login")

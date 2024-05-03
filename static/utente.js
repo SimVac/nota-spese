@@ -27,4 +27,5 @@ theme.addEventListener("click", (event) => {
 if (localStorage.getItem("theme") == "retro"){
     document.getElementById("spese").classList.add("text-base-100")
     document.getElementById("nome").classList.add("text-base-100")
+    document.getElementById("btn_nome").classList.add("text-base-100")
 }

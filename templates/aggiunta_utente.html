@@ -36,33 +36,38 @@
             </div>
         </div>
         <div class="w-10/12 flex flex-col justify-center items-center h-screen">
-            <div class="w-4/12 flex flex-col justify-evenly items-center h-3/6">
+            <div class="w-5/12 flex flex-col justify-evenly items-center h-3/6">
                 <span class="text-4xl">Aggiungi nuovo utente</span>
-                <form method="post" action="/api/add-user" class="w-64">
+                <form method="post" action="/api/add-user" class="w-full">
                     <div class="w-12/12">
-                        <div class="pb-6">
+                        <div class="pb-6 flex flex-row justify-between">
                             <input type="text" name="nome" class="input input-bordered w-full max-w-xs" placeholder="Nome" required>
-                        </div>
-                        <div class="pb-6">
+                        
                             <input type="text" name="cognome"
                                 class="input input-bordered w-full max-w-xs" placeholder="Cognome">
                         </div>
-                        <div class="pb-6">
+                        <div class="pb-6 flex flex-row justify-between">
                             <input type="text" name="username"
                                 class="input input-bordered w-full max-w-xs" placeholder="Username">
-                        </div>
-                        <div class="pb-6">
+                        
                             <select id="ruolo" name="ruolo" class="select select-bordered w-full max-w-xs" required>
                                 <option selected disabled>Ruolo</option>
                             </select>
                         </div>
-                        <div class="pb-6">
+                        <div class="pb-6 flex flex-row justify-between">
+                            <label class="form-control w-full max-w-xs">
+                                <input type="date" name="data" class="input input-bordered w-full max-w-xs">
+                                <div class="label">
+                                  <span class="label-text-alt">Data assunzione</span>
+                                </div>
+                              </label>
+                            
                             <input type="password" name="password"
                                 class="input input-bordered w-full max-w-xs" placeholder="Password">
                         </div>
                         <div class="flex justify-between flex-row-reverse">
-                            <button type="submit" class="btn">Inserisci</button>
-                            <a href="/"><button class="btn btn-ghost" type="button">Annulla</button></a>
+                            <button type="submit" class="btn w-64">Inserisci</button>
+                            <a href="/"><button class="btn btn-ghost w-64" type="button">Annulla</button></a>
                         </div>
                     </div>
                 </form>

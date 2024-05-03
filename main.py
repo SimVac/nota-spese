@@ -19,7 +19,7 @@ def login_middleware():
     path = request.path
     protected_routes = ["/", "/add-nota", "/user", "/api/add-nota", "/api/user-info",
                         "/api/add-user", "/api/tipologie", "/api/users", "/users", "/api/roles"]
-    dynamic_protected_routes = ["/api/user-notes", "/api/image"]
+    dynamic_protected_routes = ["/api/user-notes", "/api/image", "/api/add-tipologia"]
     if (path in protected_routes or any([path.startswith(route) for route in dynamic_protected_routes])) and ("logged" not in session or not session["logged"]):
         session["logged"] = False
         session.modified = True
@@ -28,7 +28,7 @@ def login_middleware():
 @app.before_request
 def permissions():
     path = request.path
-    protected_routes = ["/api/users", "/api/add-user", "/users", "/api/roles"]
+    protected_routes = ["/api/users", "/api/add-user", "/users", "/api/roles", "/api/add-tipologia"]
     if path in protected_routes and (session.get("role") != "admin"):
         return "Need admin role!", 403
 
@@ -84,6 +84,11 @@ def add_user_route():
 @app.route("/users")
 def users_route():
     return render_template("dipendenti.html")
+
+
+@app.rout("/add-tipologia")
+def add_tipologia_route():
+    return render_template("aggiunta_tipologia.html")
 
 
 @app.post("/api/add-nota")
@@ -186,6 +191,14 @@ def get_image(file_name):
     if not os.path.exists(f"images/{file_name}"):
         return "File not found!", 404
     return send_from_directory("images", file_name)
+
+
+
+@app.post("/api/add-tipologia")
+def add_tipologia():
+    query("INSERT INTO Tipologia (descrizione) VALUES (?)", [request.form["descrizione"]])
+    return redirect("/")
+
 
 
 

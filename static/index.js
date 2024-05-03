@@ -24,7 +24,7 @@ fetch(`/api/user-notes/${page}`)
             a = document.createElement("a")
             a.download = nota.allegato
             a.href = `/api/image/${nota.allegato}`
-            a.innerText = "Allegato"
+            a.innerText = "Download Allegato"
             td.appendChild(a)
             tr.appendChild(td)
             table.appendChild(tr)

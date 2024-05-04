@@ -86,7 +86,7 @@ def users_route():
     return render_template("dipendenti.html")
 
 
-@app.rout("/add-tipologia")
+@app.route("/add-tipologia")
 def add_tipologia_route():
     return render_template("aggiunta_tipologia.html")
 

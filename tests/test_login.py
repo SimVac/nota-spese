@@ -1,5 +1,10 @@
 import pytest
-from ..main import app
+
+import sys
+ 
+sys.path.insert(0, '/home/user/nota-spese/')
+
+from main import app
 
 
 

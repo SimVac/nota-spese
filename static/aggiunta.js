@@ -1,7 +1,7 @@
 fetch("/api/user-info")
     .then(res => res.json())
     .then(user => {
-        let btn = document.getElementById("btn_nome")
+        let btn = document.getElementById("nome")
         btn.innerText = `${user.nome} ${user.cognome}`
     })
 
@@ -28,6 +28,9 @@ theme.setAttribute("data-theme", nuovo == "retro" ? "retro" : "sunset")
 localStorage.setItem("theme", nuovo)
 
 if (localStorage.getItem("theme") == "retro"){
+    console.log("daje")
+    console.log(document.getElementById("nome").classList)
     document.getElementById("spese").classList.add("text-base-100")
     document.getElementById("nome").classList.add("text-base-100")
+    
 }

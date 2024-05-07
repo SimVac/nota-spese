@@ -26,7 +26,7 @@
                         {% if is_admin %}
                             <a href="/users" class="w-10/12"><button class="btn w-full">Utenti</button></a>
                         {%else%} 
-                            <a href="/users" class="w-10/12"><button class="btn w-full btn-disabled">Utenti</button></a>
+                            <button class="btn w-full btn-disabled">Utenti</button>
                         {% endif %}
                     </div>
                 </div>
@@ -38,19 +38,19 @@
 
         <div class="w-10/12 flex flex-col justify-center items-center h-screen">
             <div class="w-4/12 flex flex-col justify-evenly items-center h-3/6">
-                <span class="text-4xl" id="nome"></span>
+                <span class="text-4xl" id="nome">{{ user_info["nome"] + " " + user_info["cognome"] }}</span>
                 <div class="w-96 text-2xl">
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Data assunzione: {{ user_info["dataAssunzione"] }}</span>
+                        <span>Data assunzione:</span> <span>{{ user_info["dataAssunzione"] }}</span>
                     </div>
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Spese totali: {{user_info["speseTotali"]}}€</span>
-                    </div>
-                    <div class="pb-6">
-                        <span>Numero spese: {{user_info["numeroSpese"]}}</span>
+                        <span>Spese totali: </span> <span>{{user_info["speseTotali"]}}€</span>
                     </div>
                     <div class="pb-6 flex flex-row justify-between">
-                        <span>Ruolo: {{user_info["ruolo"]}}</span>
+                        <span>Numero spese: </span> <span> {{user_info["numeroSpese"]}}</span>
+                    </div>
+                    <div class="pb-6 flex flex-row justify-between">
+                        <span>Ruolo: </span> <span> {{user_info["ruolo"]}}</span>
                         <label class="flex cursor-pointer gap-2 pt-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"

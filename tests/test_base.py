@@ -3,7 +3,7 @@ import sys
  
 sys.path.insert(0, '/home/user/nota-spese/')
 
-from main import app
+from main import app, query
 
 
 class BaseTestCase(TestCase):

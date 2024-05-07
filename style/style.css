@@ -1,0 +1,6 @@
+@media screen and (max-width: 800px) {
+    #cont {
+        display: flex;
+        flex-direction: column-reverse !important;
+    }
+}

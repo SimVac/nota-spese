@@ -7,24 +7,67 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.10.1/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <link href="..\style\style.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Gestione Spese</title>
+    <style>
+        @media screen and (max-width: 800px) {
+            #cont {
+                display: flex;
+                flex-direction: column-reverse !important;
+            }
+            #left-bar{
+                display: flex;
+                flex-direction: row;
+                width: 100vw;
+                height: 10vh;
+            }
+            #content{
+                height: 90vh;
+                width: 100vw;
+            }
+            #gestione{
+                display: none;
+            }
+            #bottoni{
+                display: flex;
+                flex-direction: row;
+                height: 10vh;
+                width: 100vw;
+
+            }
+            #btn{
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+            #campari{
+                width: fit-content;
+            }
+            #table{
+                height: 60vh;
+            }
+            #noPad{
+                padding: 0 0 0 0 !important;
+            }
+        }
+    </style>
 </head>
 
 <body>
-    <div class="flex flex-row">
+    <div class="flex flex-row" id="cont">
         <div id="left-bar" class="flex flex-col h-screen w-2/12 bg-neutral">
-            <div class="h-1/6 flex justify-center items-center">
+            <div class="h-1/6 flex justify-center items-center" id="gestione">
                 <span class="text-2xl" id="spese"> Gestione spese </span>
             </div>
-            <div class="flex flex-col justify-between items-center h-screen">
-                <div class="flex flex-col w-10/12">
-                    <div class="p-2 flex justify-center">
-                        <a href="/" class="w-10/12"><button class="btn w-full btn-accent">Spese</button></a>
+            <div class="flex flex-col justify-between items-center h-screen" id="bottoni">
+                <div class="flex flex-col w-10/12" id="btn">
+                    <div class="p-2 flex justify-center" >
+                        <a href="/" class="w-10/12" id="campari" ><button class="btn w-full btn-accent">Spese</button></a>
                     </div>
                     <div class="p-2 flex justify-center">
                         {% if is_admin %}
-                            <a href="/users" class="w-10/12"><button class="btn w-full">Utenti</button></a>
+                            <a href="/users" class="w-10/12" id="campari"><button class="btn w-full">Utenti</button></a>
                         {%else%} 
                             <button class="btn w-full btn-disabled">Utenti</button>
                         {% endif %}
@@ -58,8 +101,8 @@
 
 
             </div>
-            <div class="flex flex-col justify-start h-3/4">
-                <div class="overflow-x-auto  p-10">
+            <div class="flex flex-col justify-start h-3/4" id="table">
+                <div class="overflow-x-auto  p-10" id="noPad">
                     <table class="table table-zebra" id="tabellaSpese">
                         <!-- head -->
                         <thead>
